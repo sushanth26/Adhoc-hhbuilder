@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Household builder</title>
+    <style>
+        .debug {
+            font-family: monospace;
+            border: 1px solid black;
+            padding: 10px;
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+<h1>Household builder</h1>
+<div class="builder">
+    <ol class="household"></ol>
+    <form id="completeForm">
+        <div id="cloneForm">
+
+            <div id="inputDetails">
+                <div>
+                    <label>Age
+                        <input type="text" id="personAge" placeholder="please enter the age">
+                    </label>
+                </div>
+
+                <div>
+                    <label>Relationship
+                        <select name="rel" id="relationship">
+                            <option value="">---</option>
+                            <option value="self">Self</option>
+                            <option value="spouse">Spouse</option>
+                            <option value="child">Child</option>
+                            <option value="parent">Parent</option>
+                            <option value="grandparent">Grandparent</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div>
+                    <label>Smoker?
+                        <input type="checkbox" id="smoker" name="smoker">
+                    </label>
+                </div>
+            </div>
+
+            <div id="add">
+                <button type="button" onclick="addPerson()">add</button>
+            </div>
+
+            <div>
+                <button type="button" onclick="submitDetails()">submit</button>
+            </div>
+        </div>
+    </form>
+
+    <table id="people">
+    </table>
+
+</div>
+<pre class="debug"></pre>
+
+<script>
+
+    var data = [];
+    var cloneForm = document.getElementById("cloneForm");
+
+
+    var addPerson = function () {
+        var personAgeValue = "personAge";
+        var relationshipValue = "relationship";
+        var smokerValue = "smoker";
+
+        var age = document.getElementById(personAgeValue).value;
+        var relationship = document.getElementById(relationshipValue).value;
+        var isSmoker = document.getElementById(smokerValue).checked;
+
+        if (isNaN(parseInt(age)) || age == "0" ) {
+            alert("age is not valid");
+            return;
+        } else if (relationship == "none" || relationship == undefined || relationship == "") {
+            alert("relationship is requried");
+            return;
+        }
+        data.push({
+            age: age,
+            relationship: relationship,
+            isSmoker: isSmoker
+        });
+        displayInfo();
+        clear();
+    }
+
+    var createTableData = function (tag, text) {
+        var td = document.createElement(tag);
+        td.innerHTML = text;
+        return td;
+    }
+
+    var displayInfo = function () {
+        var table = document.getElementById('people');
+        table.innerHTML = "";
+        if (data.length > 0) {
+            var tr = document.createElement('tr');
+            tr.appendChild(createTableData('th', 'Age'));
+            tr.appendChild(createTableData('th', 'Relationship'));
+            tr.appendChild(createTableData('th', 'Smoker'));
+            tr.appendChild(createTableData('th', ''));
+            table.appendChild(tr);
+        }
+
+        for (var i = 0; i < data.length; i++) {
+            var tr = document.createElement('tr');
+            tr.appendChild(createTableData('td', data[i].age));
+            tr.appendChild(createTableData('td', data[i].relationship));
+            tr.appendChild(createTableData('td', data[i].isSmoker ? 'Yes' : 'No'));
+            var removeButton = document.createElement('Button');
+            removeButton.innerHTML = 'remove';
+            removeButton.onclick = removePerson(i);
+            tr.appendChild(removeButton);
+            table.appendChild(tr);
+        }
+    };
+
+    var clear = function () {
+        var personAgeValue = "personAge";
+        var relationshipValue = "relationship";
+        var smokerValue = "smoker";
+
+        document.getElementById(personAgeValue).value = "";
+        document.getElementById(relationshipValue).value = "";
+        document.getElementById(smokerValue).checked = false;
+    };
+
+    var removePerson = function (index) {
+        return function() {
+            data.splice(index, 1);
+            displayInfo();
+        }
+    };
+
+    var submitDetails = function () {
+        if (data.length > 0) {
+            document.getElementsByClassName("debug")[0].innerHTML = JSON.stringify(data);
+            document.getElementsByClassName("debug")[0].style.display = 'block';
+        } else {
+            document.getElementsByClassName("debug")[0].innerHTML = "";
+            document.getElementsByClassName("debug")[0].style.display = 'none';
+        }
+
+    }
+
+</script>
+</body>
+</html>
