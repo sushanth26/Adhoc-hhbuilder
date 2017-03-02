@@ -68,7 +68,7 @@
     var data = [];
     var cloneForm = document.getElementById("cloneForm");
 
-
+//Adding person function
     var addPerson = function () {
         var personAgeValue = "personAge";
         var relationshipValue = "relationship";
@@ -94,6 +94,7 @@
         clear();
     }
 
+//Creating person data table 
     var createTableData = function (tag, text) {
         var td = document.createElement(tag);
         td.innerHTML = text;
@@ -135,6 +136,7 @@
         document.getElementById(smokerValue).checked = false;
     };
 
+//removeing person data from the table 
     var removePerson = function (index) {
         return function() {
             data.splice(index, 1);
@@ -142,6 +144,7 @@
         }
     };
 
+//Submit details to create JSON
     var submitDetails = function () {
         if (data.length > 0) {
             document.getElementsByClassName("debug")[0].innerHTML = JSON.stringify(data);
