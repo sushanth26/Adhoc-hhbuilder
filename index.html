@@ -78,7 +78,7 @@
         var relationship = document.getElementById(relationshipValue).value;
         var isSmoker = document.getElementById(smokerValue).checked;
 
-        if (isNaN(parseInt(age)) || age == "0" ) {
+        if (isNaN(parseInt(age)) || parseInt(age) == 0 ) {
             alert("age is not valid");
             return;
         } else if (relationship == "none" || relationship == undefined || relationship == "") {
